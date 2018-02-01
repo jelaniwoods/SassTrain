@@ -5,8 +5,32 @@ const logger = require('morgan');
 //TODO cookieParser might be conflicting with new express-session
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
+const flash    = require('connect-flash');
 const session = require('express-session');
+const expressValidator = require('express-validator');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+
+
+//TODO set all db stuff to db/config
+// const user = JSON.parse('_config.json')
+// const
+
+const db_conf = require('./config/db.js');
+mongoose.connect(db_conf.uri);
+
+mongoose.Promise = global.Promise
+
+// mongoose.connect(uri);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  // we're connected!
+  console.log('connection ongoing~');
+});
+// const pug = require('pug');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -19,6 +43,8 @@ app.set('view engine', 'pug');
 
 const sess = {
   secret: 'S3CR37',
+  resave: false,
+  saveUninitialized: true,
   cookie: {
     maxAge: 60000
   }
@@ -30,29 +56,53 @@ if (app.get('env') === 'production') {
 }
 
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  // we're connected!
-  console.log('connection ongoing~');
-});
 
 app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
+//Validation
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      let namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(flash());
+
+// for flash
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+
+//
+// const { check, validationResult } = require('express-validator/check');
+// const { matchedData, sanitize } = require('express-validator/filter');
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
