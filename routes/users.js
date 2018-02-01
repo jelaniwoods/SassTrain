@@ -26,9 +26,9 @@ router.get('/logout', function(req, res){
 
 
 router.get('/profile', (req, res) => {
-	console.log(req.body.username + "@@@");
+	console.log(req.user.name + "@@@");
 	// how to access username once logged in? TODO
-	res.render('profile', {username: req.body.username});
+	res.render('profile', {username: req.user.name});
 });
 
 router.post('/login',
