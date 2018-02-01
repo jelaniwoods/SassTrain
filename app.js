@@ -3,7 +3,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 //TODO cookieParser might be conflicting with new express-session
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const flash    = require('connect-flash');
 const session = require('express-session');
@@ -82,7 +82,7 @@ app.use(expressValidator({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(flash());
 
 // for flash
