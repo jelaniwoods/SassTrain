@@ -3,8 +3,9 @@ extends layout
 block content
   h1= title
   ul
-    li: a(href="users/signup") Sign Up
-    li: a(href="users/login") Log In
+    if user 
+      p #{user.slug}
+    li: a(href="users/logout") Log Out
     li: a(href="users/profile") Profile #{user.slug}
   p Welcome to #{title}
   p  #{views}
