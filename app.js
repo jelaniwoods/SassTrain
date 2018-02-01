@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-//TODO cookieParser might be conflicting with new express-session
-// const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const flash    = require('connect-flash');
 const session = require('express-session');
@@ -13,34 +11,22 @@ const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 
 
-//TODO set all db stuff to db/config
-// const user = JSON.parse('_config.json')
-// const
+// set all db stuff to config/db.js
 
 const db_conf = require('./config/db.js');
 mongoose.connect(db_conf.uri);
-
 mongoose.Promise = global.Promise
-
-// mongoose.connect(uri);
-
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
   // we're connected!
   console.log('connection ongoing~');
 });
-// const pug = require('pug');
+
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-
 const app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 const sess = {
   secret: 'S3CR37',
   resave: false,
@@ -50,16 +36,20 @@ const sess = {
   }
 }
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 }
 
-
-
+// passport and session setup
 app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
+
 //Validation
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
@@ -82,7 +72,6 @@ app.use(expressValidator({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
 app.use(flash());
 
 // for flash
@@ -95,14 +84,8 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', index);
 app.use('/users', users);
-
-//
-// const { check, validationResult } = require('express-validator/check');
-// const { matchedData, sanitize } = require('express-validator/filter');
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
