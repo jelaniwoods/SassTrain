@@ -1,4 +1,9 @@
 //- TODO list recent or popular forums or categories
 
 div
-  Eatable
+  ul
+    each x in result
+      li
+        h1= x.title
+        h3= x.category
+          p= x.description

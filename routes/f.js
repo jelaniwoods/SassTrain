@@ -5,8 +5,16 @@ const Forum = require('../models/forum');
 
 // route will be host:port/f/
 router.get('/', function(req, res){
-	let result = Forum.find();
-	res.render('forum_home', {result: result});
+	let result = Forum.find({}, function (err, forums) {
+		if (err) {
+			console.log(err);
+			res.render('forum_home');
+		} else {
+
+			console.log(forums.length, forums[0].category);
+			res.render('forum_home', {result: forums});
+		}
+	});
 });
 
 router.get('/new', function(req, res){
