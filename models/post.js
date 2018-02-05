@@ -9,6 +9,7 @@ const mongoose = require('mongoose'),
     timestamp: {type:Date,"default":Date.now},
     content:  {type: String, required: true},
     image_url:  {type: String, required: false}
+    //TODO add some auto-detect for image urls that are pasted into the input
   });
 
   // TODO I feel like the slug should be something else but

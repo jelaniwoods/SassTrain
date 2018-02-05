@@ -8,6 +8,6 @@ const mongoose = require('mongoose'),
   let Forum = new mongoose.Schema({
     title: {type: String, required: true},
     category: {type: String, required: true},
-    posts: {type: [UserPost]}
+    posts: {type: [Post]}
 
   });
