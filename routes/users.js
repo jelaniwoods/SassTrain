@@ -5,8 +5,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 
 
-
-
 router.get('/signup', function(req, res){
 	res.render('signup');
 });
@@ -18,9 +16,7 @@ router.get('/login', function(req, res){
 
 router.get('/logout', function(req, res){
 	req.logout();
-
 	req.flash('success_msg', 'You are logged out');
-
 	res.redirect('/users/login');
 });
 
@@ -73,7 +69,6 @@ router.post('/signup', (req, res) => {
 		});
 
 		req.flash('success_msg', 'You are registered and can now login');
-
 		res.redirect('/users/login');
 	}
 });
