@@ -26,6 +26,7 @@ db.once('open', () => {
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const forums = require('./routes/f');
 const app = express();
 const sess = {
   secret: 'S3CR37',
@@ -86,6 +87,7 @@ app.use(function (req, res, next) {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
+app.use('/f', forums);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
