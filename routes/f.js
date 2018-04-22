@@ -54,9 +54,33 @@ router.post('/new', (req, res) => {
 	}
 });
 router.get('/:slug', function(req, res){
-	res.render('forum_page');
+	// console.log(res.params.slug);
+	Forum.findOne({slug: req.params.slug }, function(err, post) {
+		if (err) {
+			console.log(err);
+			res.render('forum_page');
+		} else {
+			console.log(' dddd');
+			res.render('forum_page', {post: post, editing: false});
+		}
+	});
 });
 
+router.post('/:slug/update', function(req, res) {
+	Forum.findOneAndUpdate({slug: req.params.slug }, {title: req.body.title , category: req.body.category, description: req.body.description }, function(err, updatedF,count) {
+		
+		if (err) {
+			console.log(err);
+			res.render('forum_page');
+		} else {
+			console.log(' dddd');
+			res.render('forum_page', {post: updatedF});
+		}
+	});
+	//TODO can't figure out how to redirect to an updated slug
+	// below just goes to the literal '/:slug' and not an actual slug
+	// res.redirect('/:slug');
+});
 // TODO add search route
 
 module.exports = router;

@@ -1,0 +1,35 @@
+div
+    div
+        h1 #{post.title} 
+    div
+        h3 #{post.category}
+    div
+        p #{post.description} 
+    button(type='button', onClick='reveal()') Edit
+
+
+    #edit(style={visibility: 'hidden'})
+        form(action="/f/" + post.slug + "/update" method="post")
+            div
+            label Title
+                input(type="text" name="title")
+            div
+            label Category
+                input(type="text" name="category")
+            div
+            label Description
+                input(type="text" name="description")
+            div
+                input(type="submit" value="Post!")
+
+    
+script.
+    function reveal() {
+        if (this.editing) 
+            document.getElementById("edit").style.visibility = "hidden";
+        else
+            document.getElementById("edit").style.visibility = "visible";
+
+        this.editing = !this.editing;
+        console.log(this.editing);
+    }
