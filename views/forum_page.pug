@@ -1,10 +1,13 @@
-div
+
+div(onClick="enableEdit()")
     div
         h1 #{post.title} 
     div
         h3 #{post.category}
     div
-        p #{post.description} 
+        p #{post.description}  
+    button(type='button')
+        a(href="../") Back
     button(type='button', onClick='reveal()') Edit
 
 
@@ -22,14 +25,12 @@ div
             div
                 input(type="submit" value="Post!")
 
-    
 script.
     function reveal() {
         if (this.editing) 
             document.getElementById("edit").style.visibility = "hidden";
         else
             document.getElementById("edit").style.visibility = "visible";
-
         this.editing = !this.editing;
         console.log(this.editing);
     }

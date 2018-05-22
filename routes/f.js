@@ -10,7 +10,6 @@ router.get('/', function(req, res){
 			console.log(err);
 			res.render('forum_home');
 		} else {
-
 			console.log(forums.length, forums[0].category);
 			res.render('forum_home', {result: forums});
 		}
